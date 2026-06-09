@@ -196,3 +196,17 @@ arogyasahayak/
 ## Status
 
 Under active development as a healthcare-focused AI project.
+
+---
+
+## Frontend Run Instructions
+
+From the workspace root:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+This starts the Vite development server for the React + Tailwind frontend.
