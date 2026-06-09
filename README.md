@@ -80,6 +80,31 @@ ArogyaSahayak AI aims to simplify healthcare communication through AI-driven exp
 
 ---
 
+## Backend Setup
+
+Run the backend locally with the following commands:
+
+```bash
+cd backend
+pip install -r requirements.txt
+python -m uvicorn main:app --reload
+```
+
+Before starting, create a local environment file from the example file:
+
+```bash
+cd backend
+copy .env.example .env
+```
+
+Add your Gemini API key to backend/.env as:
+
+```env
+GEMINI_API_KEY=your_api_key_here
+```
+
+---
+
 ## Technology Stack
 
 ### Backend
