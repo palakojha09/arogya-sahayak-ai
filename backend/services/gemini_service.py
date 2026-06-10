@@ -12,42 +12,87 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 
 
 def get_model():
-    """Create a Gemini model instance using the API key from the environment."""
+    """Create Gemini model."""
+
     if not GEMINI_API_KEY:
-        raise ValueError("GEMINI_API_KEY is not set. Please add it to backend/.env")
+        raise ValueError(
+            "GEMINI_API_KEY is not set. Please add it to backend/.env"
+        )
 
     genai.configure(api_key=GEMINI_API_KEY)
-    return genai.GenerativeModel("gemini-2.0-flash-lite")
+
+    return genai.GenerativeModel("gemini-2.5-flash")
 
 
 def text_prompt(prompt: str) -> str:
-    """Send a text-only prompt to Gemini and return the response text."""
+    """Send text prompt."""
+
     model = get_model()
+
     response = model.generate_content(prompt)
+
     return response.text
 
 
 def image_prompt(image_bytes: bytes, prompt: str) -> str:
-    """Send an image and prompt to Gemini Vision and return raw text."""
+    """Send image + prompt to Gemini."""
+
     model = get_model()
 
     try:
         image = Image.open(BytesIO(image_bytes)).convert("RGB")
-        response = model.generate_content([prompt, image])
+
+        response = model.generate_content(
+            [prompt, image]
+        )
+
         return response.text
+
     except Exception as exc:
-        raise RuntimeError(f"Unable to analyze image with Gemini: {str(exc)}") from exc
+        raise RuntimeError(
+            f"Unable to analyze image with Gemini: {str(exc)}"
+        ) from exc
 
 
 def parse_json_response(raw_text: str):
-    """Try to decode Gemini JSON output safely."""
+    """
+    Parse Gemini JSON safely.
+    Handles ```json wrappers automatically.
+    """
+
     try:
-        return json.loads(raw_text)
-    except json.JSONDecodeError:
-        return {"raw_response": raw_text}
+        cleaned = raw_text.strip()
+
+        # Remove markdown wrappers
+        if cleaned.startswith("```json"):
+            cleaned = cleaned.replace("```json", "", 1)
+
+        if cleaned.startswith("```"):
+            cleaned = cleaned.replace("```", "", 1)
+
+        if cleaned.endswith("```"):
+            cleaned = cleaned[:-3]
+
+        cleaned = cleaned.strip()
+
+        return json.loads(cleaned)
+
+    except Exception as e:
+
+        print("\n==============================")
+        print("GEMINI RAW RESPONSE")
+        print("==============================")
+        print(raw_text)
+        print("==============================\n")
+
+        return {
+            "raw_response": raw_text,
+            "parse_error": str(e)
+        }
 
 
 def ai_test():
+
     model = get_model()
 
     response = model.generate_content("Say hello")

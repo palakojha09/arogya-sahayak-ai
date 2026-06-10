@@ -1,45 +1,86 @@
 from fastapi import UploadFile
 
-from services.gemini_service import image_prompt, parse_json_response
+from services.gemini_service import (
+    image_prompt,
+    parse_json_response,
+)
 
 
 async def analyze_prescription_file(file: UploadFile):
-    """Analyze a prescription image and return structured healthcare guidance."""
+    """Analyze prescription image."""
+
     file_bytes = await file.read()
 
     prompt = """
-You are ArogyaSahayak AI, an assistant for patients and caregivers.
-Read the prescription image carefully and return ONLY valid JSON.
+You are ArogyaSahayak AI.
 
-Required fields:
+Analyze the prescription image carefully.
+
+Return ONLY valid JSON.
+
 {
-  "patient_summary": "Short summary of the patient condition or the prescription context in simple language.",
+  "patient_summary": "Short summary",
   "medicines": [
     {
       "name": "Medicine name",
-      "dose": "Dose and strength",
-      "timing": "When to take it",
-      "purpose": "Why it is used"
+      "dose": "Dose",
+      "timing": "Timing",
+      "purpose": "Purpose"
     }
   ],
-  "dosage_schedule": "Simple schedule explanation.",
-  "precautions": ["Important safety instructions"],
-  "simple_explanation": "Simple plain-language explanation for the patient.",
-  "caregiver_summary": "Short summary for a caregiver or family member."
+  "dosage_schedule": "Simple schedule",
+  "precautions": [
+    "Precaution 1"
+  ],
+  "simple_explanation": "Easy explanation",
+  "caregiver_summary": "Caregiver guidance"
 }
 
-If any value is unclear, write 'Not clearly visible in the image' instead of guessing.
+IMPORTANT:
+- Return ONLY JSON
+- No markdown
+- No explanation outside JSON
+- If unreadable write:
+  "Not clearly visible in image"
 """
 
-    raw_response = image_prompt(file_bytes, prompt)
+    raw_response = image_prompt(
+        file_bytes,
+        prompt
+    )
+
+    print("\n==============================")
+    print("PRESCRIPTION RESPONSE")
+    print("==============================")
+    print(raw_response)
+    print("==============================\n")
+
     result = parse_json_response(raw_response)
 
     return {
-        "patient_summary": result.get("patient_summary", "Not available"),
-        "medicines": result.get("medicines", []),
-        "dosage_schedule": result.get("dosage_schedule", "Not available"),
-        "precautions": result.get("precautions", ["Please follow doctor's advice"]),
-        "simple_explanation": result.get("simple_explanation", "No simple explanation available."),
-        "caregiver_summary": result.get("caregiver_summary", "No caregiver summary available."),
-        "source": "gemini_vision",
+        "patient_summary": result.get(
+            "patient_summary",
+            "Not available"
+        ),
+        "medicines": result.get(
+            "medicines",
+            []
+        ),
+        "dosage_schedule": result.get(
+            "dosage_schedule",
+            "Not available"
+        ),
+        "precautions": result.get(
+            "precautions",
+            ["Please follow doctor's advice"]
+        ),
+        "simple_explanation": result.get(
+            "simple_explanation",
+            "No simple explanation available."
+        ),
+        "caregiver_summary": result.get(
+            "caregiver_summary",
+            "No caregiver summary available."
+        ),
+        "source": "gemini_vision"
     }
