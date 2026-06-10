@@ -21,3 +21,7 @@ dist/
 # OS files
 Thumbs.db
 .DS_Store
+
+backend/simple_test.py
+backend/test_gemini.py
+frontend/package-lock.json
