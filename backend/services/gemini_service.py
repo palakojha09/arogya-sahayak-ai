@@ -17,7 +17,7 @@ def get_model():
         raise ValueError("GEMINI_API_KEY is not set. Please add it to backend/.env")
 
     genai.configure(api_key=GEMINI_API_KEY)
-    return genai.GenerativeModel("gemini-1.5-flash")
+    return genai.GenerativeModel("gemini-2.0-flash-lite")
 
 
 def text_prompt(prompt: str) -> str:
@@ -48,10 +48,11 @@ def parse_json_response(raw_text: str):
 
 
 def ai_test():
-    """Simple connectivity helper for the /ai-test endpoint."""
-    if not GEMINI_API_KEY:
-        return {"status": "missing_api_key"}
-
     model = get_model()
-    response = model.generate_content("Reply with 'Gemini API is ready for ArogyaSahayak AI.'")
-    return {"status": "ok", "reply": response.text}
+
+    response = model.generate_content("Say hello")
+
+    return {
+        "status": "ok",
+        "reply": response.text
+    }
