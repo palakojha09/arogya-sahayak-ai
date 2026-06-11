@@ -8,6 +8,7 @@ import AnalysisResult from "./components/AnalysisResult.jsx";
 import BillBreakdown from "./components/BillBreakdown.jsx";
 import CaregiverSummary from "./components/CaregiverSummary.jsx";
 import ActionPlan from "./components/ActionPlan.jsx";
+import LoadingSpinner from "./components/LoadingSpinner.jsx";
 
 const demoPrescription = {
   patient_summary: "Mrs. Sharma is prescribed medicines for blood pressure and digestion.",
@@ -51,10 +52,10 @@ function App() {
     setLoadingPrescription(true);
     setPrescriptionError("");
     setDemoMode(false);
+    setPrescriptionResult(null);
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("language", language);
 
     try {
       const response = await fetch(`${API_BASE_URL}/analyze-prescription`, {
@@ -63,15 +64,15 @@ function App() {
       });
 
       if (!response.ok) {
-        throw new Error("Server returned an error");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `Server error: ${response.status}`);
       }
 
       const data = await response.json();
       setPrescriptionResult(data);
     } catch (error) {
-      setPrescriptionError("Unable to reach backend. Showing demo results.");
-      setPrescriptionResult(demoPrescription);
-      setDemoMode(true);
+      console.error("Prescription analysis error:", error);
+      setPrescriptionError(error.message || "Failed to analyze prescription. Please try again.");
     } finally {
       setLoadingPrescription(false);
     }
@@ -81,10 +82,10 @@ function App() {
     setLoadingBill(true);
     setBillError("");
     setDemoMode(false);
+    setBillResult(null);
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("language", language);
 
     try {
       const response = await fetch(`${API_BASE_URL}/analyze-bill`, {
@@ -93,15 +94,15 @@ function App() {
       });
 
       if (!response.ok) {
-        throw new Error("Server returned an error");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `Server error: ${response.status}`);
       }
 
       const data = await response.json();
       setBillResult(data);
     } catch (error) {
-      setBillError("Unable to reach backend. Showing demo results.");
-      setBillResult(demoBill);
-      setDemoMode(true);
+      console.error("Bill analysis error:", error);
+      setBillError(error.message || "Failed to analyze bill. Please try again.");
     } finally {
       setLoadingBill(false);
     }
@@ -128,7 +129,9 @@ function App() {
             demoMode={demoMode}
           />
 
-          {prescriptionResult && (
+          {loadingPrescription && <LoadingSpinner />}
+
+          {prescriptionResult && !loadingPrescription && (
             <div className="space-y-6">
               <AnalysisResult result={prescriptionResult} />
               <CaregiverSummary summary={prescriptionResult.caregiver_summary} />
