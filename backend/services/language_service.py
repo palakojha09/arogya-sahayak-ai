@@ -19,6 +19,7 @@ Source text:
     try:
         raw_response = text_prompt(prompt)
         result = parse_json_response(raw_response)
+        return result
 
     except Exception:
         return {
