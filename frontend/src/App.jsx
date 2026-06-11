@@ -46,6 +46,9 @@ function App() {
   const [loadingBill, setLoadingBill] = useState(false);
   const [prescriptionError, setPrescriptionError] = useState("");
   const [billError, setBillError] = useState("");
+  const [actionPlan, setActionPlan] = useState(null);
+  const [actionPlanLoading, setActionPlanLoading] = useState(false);
+  const [actionPlanError, setActionPlanError] = useState("");
   const [demoMode, setDemoMode] = useState(false);
 
   const handleAnalyzePrescription = async (file) => {
@@ -53,6 +56,8 @@ function App() {
     setPrescriptionError("");
     setDemoMode(false);
     setPrescriptionResult(null);
+    setActionPlan(null);
+    setActionPlanError("");
 
     const formData = new FormData();
     formData.append("file", file);
@@ -108,6 +113,35 @@ function App() {
     }
   };
 
+  const handleGenerateActionPlan = async () => {
+    if (!prescriptionResult) return;
+
+    setActionPlanLoading(true);
+    setActionPlanError("");
+    setActionPlan(null);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/generate-action-plan`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prescription_analysis: prescriptionResult }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `Server error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setActionPlan(data);
+    } catch (error) {
+      console.error("Action plan generation error:", error);
+      setActionPlanError(error.message || "Failed to generate action plan. Please try again.");
+    } finally {
+      setActionPlanLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto max-w-6xl px-4 py-8">
@@ -134,8 +168,28 @@ function App() {
           {prescriptionResult && !loadingPrescription && (
             <div className="space-y-6">
               <AnalysisResult result={prescriptionResult} />
+
+              <div className="flex flex-col gap-4 rounded-3xl border border-slate-800 bg-slate-900/95 p-6 shadow-xl shadow-slate-950/20 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-slate-300">
+                  Generate a custom action plan from this prescription analysis.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleGenerateActionPlan}
+                  disabled={actionPlanLoading}
+                  className="inline-flex items-center justify-center rounded-3xl bg-cyan-500 px-6 py-3 text-base font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {actionPlanLoading ? "Generating..." : "Generate Action Plan"}
+                </button>
+              </div>
+
+              {actionPlanError && (
+                <p className="text-sm text-rose-300">{actionPlanError}</p>
+              )}
+
               <CaregiverSummary summary={prescriptionResult.caregiver_summary} />
-              <ActionPlan plan={prescriptionResult.action_plan} />
+
+              {actionPlan && <ActionPlan plan={actionPlan} />}
             </div>
           )}
 
