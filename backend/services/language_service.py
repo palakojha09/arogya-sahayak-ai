@@ -16,12 +16,14 @@ Source text:
 {text}
 """
 
-    raw_response = text_prompt(prompt)
-    result = parse_json_response(raw_response)
+    try:
+        raw_response = text_prompt(prompt)
+        result = parse_json_response(raw_response)
 
-    return {
-        "translated_text": result.get("translated_text", text),
-        "simplified_explanation": result.get("simplified_explanation", text),
-        "target_language": target_language,
-        "source": "gemini_text",
-    }
+    except Exception:
+        return {
+            "translated_text": text,
+            "simplified_explanation": text,
+            "target_language": target_language,
+            "source": "fallback"
+        }
