@@ -12,7 +12,7 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 
 
 def get_model():
-    """Create Gemini model."""
+
 
     if not GEMINI_API_KEY:
         raise ValueError(
