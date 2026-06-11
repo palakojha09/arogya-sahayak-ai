@@ -25,3 +25,4 @@ Thumbs.db
 backend/simple_test.py
 backend/test_gemini.py
 frontend/package-lock.json
+frontend/.vite
