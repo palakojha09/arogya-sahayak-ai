@@ -107,7 +107,11 @@ function App() {
       setBillResult(data);
     } catch (error) {
       console.error("Bill analysis error:", error);
-      setBillError(error.message || "Failed to analyze bill. Please try again.");
+      const message = error.message || "Unable to analyze bill. Please try again.";
+      const friendlyMessage = /quota|limit|rate limit|Gemini/i.test(message)
+        ? "Bill analysis failed because the AI service quota was reached. Please try again later."
+        : "Unable to analyze bill. Please try again.";
+      setBillError(friendlyMessage);
     } finally {
       setLoadingBill(false);
     }
