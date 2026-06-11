@@ -3,8 +3,14 @@ repos:
     rev: v0.15.16
     hooks:
       - id: ruff
+      - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v2.1.0
+    rev: v1.18.1
     hooks:
       - id: mypy
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.2
+    hooks:
+      - id: gitleaks
