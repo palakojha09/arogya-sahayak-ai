@@ -1,0 +1,12 @@
+**pycache**/
+*.pyc
+*.pyo
+*.pyd
+.env
+.git
+.gitignore
+node_modules/
+venv/
+.venv/
+dist/
+build/
