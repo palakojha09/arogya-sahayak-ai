@@ -49,11 +49,6 @@ IMPORTANT:
         prompt
     )
 
-    print("\n==============================")
-    print("PRESCRIPTION RESPONSE")
-    print("==============================")
-    print(raw_response)
-    print("==============================\n")
 
     result = parse_json_response(raw_response)
 
