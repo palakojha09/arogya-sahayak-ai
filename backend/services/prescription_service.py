@@ -44,13 +44,33 @@ IMPORTANT:
   "Not clearly visible in image"
 """
 
-    raw_response = image_prompt(
-        file_bytes,
-        prompt
-    )
+    try:
+        raw_response = image_prompt(
+            file_bytes,
+            prompt
+        )
 
+        result = parse_json_response(raw_response)
 
-    result = parse_json_response(raw_response)
+    except Exception:
+        return {
+            "patient_summary": "Demo mode active",
+            "medicines": [
+                {
+                    "name": "Sample Medicine",
+                    "dose": "1 tablet",
+                    "timing": "After food",
+                    "purpose": "Demonstration"
+                }
+            ],
+            "dosage_schedule": "Take medicine as prescribed.",
+            "precautions": [
+                "Follow doctor advice"
+            ],
+            "simple_explanation": "AI service temporarily unavailable. Showing demo data.",
+            "caregiver_summary": "Ensure medicines are taken on time.",
+            "source": "fallback"
+        }
 
     return {
         "patient_summary": result.get(
