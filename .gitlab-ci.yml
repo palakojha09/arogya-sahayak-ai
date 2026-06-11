@@ -1,9 +1,24 @@
 stages:
-  - lint
+  - quality
+  - security
 
-lint:
-  stage: lint
-  image: python:3.12
+quality-checks:
+  stage: quality
+  image: python:3.11
+
+  before_script:
+    - pip install ruff mypy pip-audit
+
   script:
-    - pip install ruff
     - ruff check .
+    - mypy backend
+    - pip-audit
+
+gitleaks:
+  stage: security
+  image:
+    name: zricethezav/gitleaks:latest
+    entrypoint: [""]
+
+  script:
+    - gitleaks detect --source . --verbose
