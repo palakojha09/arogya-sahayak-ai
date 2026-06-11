@@ -1,3 +1,5 @@
+import LoadingSpinner from "./LoadingSpinner.jsx";
+
 export default function BillBreakdown({ onUpload, loading, error, result, demoMode }) {
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900/95 p-8 shadow-2xl shadow-slate-950/30">
@@ -33,8 +35,15 @@ export default function BillBreakdown({ onUpload, loading, error, result, demoMo
         >
           {loading ? "Analyzing bill..." : "Select Bill"}
         </button>
-        {error && <p className="text-sm text-rose-300">{error}</p>}
+        {error && (
+          <div className="mt-3 rounded-2xl border border-rose-700 bg-rose-900/10 px-4 py-3 text-rose-200">
+            <p className="font-semibold">Bill analysis failed</p>
+            <p className="mt-1 text-sm">{error}</p>
+          </div>
+        )}
       </div>
+
+      {loading && <LoadingSpinner message={"Analyzing bill..."} />}
 
       {demoMode && (
         <div className="mt-6 rounded-3xl border border-amber-400/40 bg-amber-500/10 p-4 text-amber-100">
@@ -45,19 +54,88 @@ export default function BillBreakdown({ onUpload, loading, error, result, demoMo
       {result && (
         <div className="mt-8 rounded-3xl bg-slate-950/90 p-6">
           <h3 className="text-xl font-semibold text-white">Bill Breakdown</h3>
-          <p className="mt-4 text-slate-300">{result.simple_explanation}</p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            {result.categories?.map((item, index) => (
-              <div key={index} className="rounded-3xl border border-slate-800 bg-slate-900/90 p-4">
-                <p className="text-sm uppercase tracking-[0.16em] text-slate-400">{item.label}</p>
-                <p className="mt-2 text-lg font-semibold text-white">{item.amount}</p>
+
+          {result.simple_explanation && (
+            <p className="mt-4 text-slate-300">{result.simple_explanation}</p>
+          )}
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-6">
+              <p className="text-sm uppercase tracking-[0.16em] text-slate-400">Total Amount</p>
+              <p className="mt-2 text-2xl font-semibold text-white">
+                {result.total_amount ?? result.total ?? "N/A"}
+              </p>
+            </div>
+
+            {result.breakdown?.length > 0 && (
+              <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-6">
+                <p className="text-sm uppercase tracking-[0.16em] text-slate-400">Charge Breakdown</p>
+                <div className="mt-4 space-y-4">
+                  {result.breakdown.map((item, index) => {
+                    const title = typeof item === "string"
+                      ? item
+                      : item.label || item.description || item.name || `Charge ${index + 1}`;
+                    const amount = typeof item === "string" ? null : item.amount;
+                    const note = typeof item === "string" ? null : item.note;
+
+                    return (
+                      <div key={index} className="rounded-3xl border border-slate-800 bg-slate-950/80 p-4">
+                        <p className="font-semibold text-slate-100">{title}</p>
+                        {amount && <p className="mt-1 text-slate-300">{amount}</p>}
+                        {note && <p className="mt-1 text-sm text-slate-400">{note}</p>}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            ))}
+            )}
           </div>
-          <div className="mt-6 rounded-3xl border border-slate-800 bg-slate-900/90 p-4">
-            <p className="text-sm uppercase tracking-[0.16em] text-slate-400">Estimated total</p>
-            <p className="mt-2 text-2xl font-semibold text-white">{result.total}</p>
-          </div>
+
+          {result.suspicious_charges?.length > 0 && (
+            <div className="mt-6 rounded-3xl border border-slate-800 bg-slate-900/90 p-6">
+              <h4 className="text-lg font-semibold text-white">Suspicious Charges</h4>
+              <div className="mt-4 space-y-4 text-slate-300">
+                {result.suspicious_charges.map((item, index) => {
+                  const title = typeof item === "string"
+                    ? item
+                    : item.label || item.description || item.name || `Charge ${index + 1}`;
+                  const amount = typeof item === "string" ? null : item.amount;
+                  const reason = typeof item === "string" ? null : item.reason;
+
+                  return (
+                    <div key={index} className="rounded-3xl border border-slate-800 bg-slate-950/80 p-4">
+                      <p className="font-semibold text-slate-100">{title}</p>
+                      {amount && <p className="mt-1 text-slate-300">{amount}</p>}
+                      {reason && <p className="mt-1 text-sm text-slate-400">{reason}</p>}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {result.categories?.length > 0 && (
+            <div className="mt-6 rounded-3xl border border-slate-800 bg-slate-900/90 p-6">
+              <h4 className="text-lg font-semibold text-white">Legacy Category Breakdown</h4>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                {result.categories.map((item, index) => (
+                  <div key={index} className="rounded-3xl border border-slate-800 bg-slate-950/80 p-4">
+                    <p className="text-sm uppercase tracking-[0.16em] text-slate-400">{item.label}</p>
+                    <p className="mt-2 text-lg font-semibold text-white">{item.amount}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {result.raw_response && (
+            <div className="mt-6 rounded-3xl border border-slate-800 bg-slate-900/90 p-6">
+              <h4 className="text-lg font-semibold text-white">AI Bill Explanation</h4>
+              <pre className="mt-4 whitespace-pre-wrap rounded-3xl border border-slate-800 bg-slate-950/90 p-4 text-sm text-slate-300">
+                {result.raw_response}
+              </pre>
+            </div>
+          )}
         </div>
       )}
     </section>

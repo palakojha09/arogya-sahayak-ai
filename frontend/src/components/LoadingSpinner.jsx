@@ -1,4 +1,4 @@
-export default function LoadingSpinner() {
+export default function LoadingSpinner({ message = "Loading..." }) {
   return (
     <div className="flex items-center justify-center py-8">
       <div className="space-y-4 text-center">
@@ -8,7 +8,7 @@ export default function LoadingSpinner() {
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
         </div>
-        <p className="text-slate-300 text-lg font-medium">Analyzing prescription...</p>
+        <p className="text-slate-300 text-lg font-medium">{message}</p>
       </div>
     </div>
   );
