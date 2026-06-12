@@ -68,7 +68,7 @@ async def analyze_prescription(
     file: UploadFile = File(...), language: str = Form("English")
 ):
     try:
-        result = await analyze_prescription_file(file)
+        result = await analyze_prescription_file(file, language)
         return result
     except Exception as exc:
         raise HTTPException(
@@ -79,7 +79,7 @@ async def analyze_prescription(
 @app.post("/analyze-bill")
 async def analyze_bill(file: UploadFile = File(...), language: str = Form("English")):
     try:
-        result = await analyze_bill_file(file)
+        result = await analyze_bill_file(file, language)
         return result
     except Exception as exc:
         raise HTTPException(

@@ -6,13 +6,16 @@ from services.gemini_service import (
 )
 
 
-async def analyze_prescription_file(file: UploadFile):
+async def analyze_prescription_file(file: UploadFile, language: str = "English"):
     """Analyze prescription image."""
 
     file_bytes = await file.read()
 
     prompt = """
 You are ArogyaSahayak AI.
+
+Return all summaries, explanations, schedules,
+and caregiver guidance in {language}.
 
 Analyze the prescription image carefully.
 
@@ -45,10 +48,7 @@ IMPORTANT:
 """
 
     try:
-        raw_response = image_prompt(
-            file_bytes,
-            prompt
-        )
+        raw_response = image_prompt(file_bytes, prompt)
 
         result = parse_json_response(raw_response)
 
@@ -60,42 +60,26 @@ IMPORTANT:
                     "name": "Sample Medicine",
                     "dose": "1 tablet",
                     "timing": "After food",
-                    "purpose": "Demonstration"
+                    "purpose": "Demonstration",
                 }
             ],
             "dosage_schedule": "Take medicine as prescribed.",
-            "precautions": [
-                "Follow doctor advice"
-            ],
+            "precautions": ["Follow doctor advice"],
             "simple_explanation": "AI service temporarily unavailable. Showing demo data.",
             "caregiver_summary": "Ensure medicines are taken on time.",
-            "source": "fallback"
+            "source": "fallback",
         }
 
     return {
-        "patient_summary": result.get(
-            "patient_summary",
-            "Not available"
-        ),
-        "medicines": result.get(
-            "medicines",
-            []
-        ),
-        "dosage_schedule": result.get(
-            "dosage_schedule",
-            "Not available"
-        ),
-        "precautions": result.get(
-            "precautions",
-            ["Please follow doctor's advice"]
-        ),
+        "patient_summary": result.get("patient_summary", "Not available"),
+        "medicines": result.get("medicines", []),
+        "dosage_schedule": result.get("dosage_schedule", "Not available"),
+        "precautions": result.get("precautions", ["Please follow doctor's advice"]),
         "simple_explanation": result.get(
-            "simple_explanation",
-            "No simple explanation available."
+            "simple_explanation", "No simple explanation available."
         ),
         "caregiver_summary": result.get(
-            "caregiver_summary",
-            "No caregiver summary available."
+            "caregiver_summary", "No caregiver summary available."
         ),
-        "source": "gemini_vision"
+        "source": "gemini_vision",
     }

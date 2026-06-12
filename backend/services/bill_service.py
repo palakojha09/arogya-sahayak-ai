@@ -6,7 +6,7 @@ from pypdf import PdfReader
 from services.gemini_service import image_prompt, parse_json_response, text_prompt
 
 
-async def analyze_bill_file(file: UploadFile):
+async def analyze_bill_file(file: UploadFile, language: str = "English"):
     """Analyze a bill image or PDF and return a simple charge breakdown."""
     file_bytes = await file.read()
     file_name = (file.filename or "").lower()
@@ -19,7 +19,11 @@ async def analyze_bill_file(file: UploadFile):
             bill_text = "\n".join(text_parts)
 
             prompt = f"""
-You are ArogyaSahayak AI. Explain this hospital bill in simple language for a patient.
+You are ArogyaSahayak AI. 
+
+Return all explanations and summaries in {language}.
+
+Explain this hospital bill in simple language for a patient.
 Return ONLY valid JSON with these keys:
 {{
   "bill_summary": "Short summary of the bill in simple language.",
@@ -38,7 +42,9 @@ Bill text:
                 "bill_summary": result.get("bill_summary", "Bill summary unavailable."),
                 "cost_categories": result.get("cost_categories", []),
                 "expensive_components": result.get("expensive_components", []),
-                "simple_explanation": result.get("simple_explanation", "No plain-language explanation available."),
+                "simple_explanation": result.get(
+                    "simple_explanation", "No plain-language explanation available."
+                ),
                 "source": "pdf_text",
             }
         except Exception as exc:
@@ -66,28 +72,25 @@ Return ONLY valid JSON with these keys:
                 {
                     "category": "Consultation",
                     "amount": "500",
-                    "explanation": "Doctor consultation fee"
+                    "explanation": "Doctor consultation fee",
                 },
                 {
                     "category": "Medicines",
                     "amount": "1200",
-                    "explanation": "Prescribed medications"
-                }
-        ],
-        "expensive_components": [
-            "Room charges"
-        ],
-        "simple_explanation": "AI service unavailable. Showing sample bill analysis.",
-        "source": "fallback"
-    }
+                    "explanation": "Prescribed medications",
+                },
+            ],
+            "expensive_components": ["Room charges"],
+            "simple_explanation": "AI service unavailable. Showing sample bill analysis.",
+            "source": "fallback",
+        }
 
     return {
         "bill_summary": result.get("bill_summary", "Bill summary unavailable."),
         "cost_categories": result.get("cost_categories", []),
         "expensive_components": result.get("expensive_components", []),
         "simple_explanation": result.get(
-            "simple_explanation",
-            "No plain-language explanation available."
+            "simple_explanation", "No plain-language explanation available."
         ),
         "source": "gemini_vision",
     }
