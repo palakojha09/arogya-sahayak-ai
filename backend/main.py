@@ -67,6 +67,9 @@ async def ai_test():
 async def analyze_prescription(
     file: UploadFile = File(...), language: str = Form("English")
 ):
+
+    print("LANGUAGE RECEIVED:", language)
+
     try:
         result = await analyze_prescription_file(file, language)
         return result
