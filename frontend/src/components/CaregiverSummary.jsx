@@ -1,8 +1,18 @@
 export default function CaregiverSummary({ summary }) {
+  if (!summary) return null;
+
   return (
-    <section className="rounded-3xl border border-slate-800 bg-slate-900/95 p-8 shadow-xl shadow-slate-950/20">
-      <h3 className="text-2xl font-semibold text-white">Caregiver Summary</h3>
-      <p className="mt-4 text-slate-300">{summary}</p>
+    <section className="rounded-[2rem] border border-emerald-300/15 bg-emerald-400/10 p-5 shadow-xl shadow-slate-950/20 backdrop-blur-xl sm:p-7">
+      <div className="flex items-start gap-4">
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-2xl">
+          👨‍👩‍👧
+        </span>
+        <div>
+          <p className="text-sm uppercase tracking-[0.22em] text-emerald-100">Important</p>
+          <h3 className="mt-2 text-2xl font-bold text-white">Caregiver Summary</h3>
+          <p className="mt-4 leading-8 text-emerald-50/90">{summary}</p>
+        </div>
+      </div>
     </section>
   );
 }

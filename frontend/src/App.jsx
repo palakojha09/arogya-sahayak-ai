@@ -14,8 +14,8 @@ import LoadingSpinner from "./components/LoadingSpinner.jsx";
 const demoPrescription = {
   patient_summary: "Mrs. Sharma is prescribed medicines for blood pressure and digestion.",
   medicines: [
-    { name: "Amlodipine", purpose: "Helps lower blood pressure" },
-    { name: "Pantoprazole", purpose: "Reduces stomach acidity" }
+    { name: "Amlodipine", dose: "5 mg", timing: "Morning", purpose: "Helps lower blood pressure" },
+    { name: "Pantoprazole", dose: "40 mg", timing: "Before breakfast", purpose: "Reduces stomach acidity" },
   ],
   dosage_schedule: "Take Amlodipine once daily in the morning and Pantoprazole once daily before breakfast.",
   precautions: "Do not skip doses. Drink plenty of water and avoid spicy food.",
@@ -24,19 +24,19 @@ const demoPrescription = {
   action_plan: {
     reminders: ["Morning medication", "Daily blood pressure check"],
     caregiver_actions: ["Prepare pills before breakfast", "Track any side effects"],
-    next_steps: ["Follow up with the doctor in 5 days", "Keep a record of medicine timing"]
-  }
+    next_steps: ["Follow up with the doctor in 5 days", "Keep a record of medicine timing"],
+  },
 };
 
 const demoBill = {
   summary: "This bill shows consultation, medicine, and room charges.",
   categories: [
-    { label: "Consultation", amount: "₹600" },
-    { label: "Medicines", amount: "₹1,200" },
-    { label: "Room Charges", amount: "₹2,300" }
+    { label: "Consultation", amount: "Rs. 600" },
+    { label: "Medicines", amount: "Rs. 1,200" },
+    { label: "Room Charges", amount: "Rs. 2,300" },
   ],
-  total: "₹4,100",
-  simple_explanation: "Most of the cost is for room and care. Medicine charges are moderate."
+  total: "Rs. 4,100",
+  simple_explanation: "Most of the cost is for room and care. Medicine charges are moderate.",
 };
 
 function App() {
@@ -66,7 +66,7 @@ function App() {
     try {
       const response = await fetch(`${API_BASE_URL}/analyze-prescription`, {
         method: "POST",
-        body: formData
+        body: formData,
       });
 
       if (!response.ok) {
@@ -78,7 +78,7 @@ function App() {
       setPrescriptionResult(data);
     } catch (error) {
       console.error("Prescription analysis error:", error);
-      setPrescriptionError(error.message || "Failed to analyze prescription. Please try again.");
+      setPrescriptionError("AI prescription analysis is temporarily unavailable. Please try again later.");
     } finally {
       setLoadingPrescription(false);
     }
@@ -96,7 +96,7 @@ function App() {
     try {
       const response = await fetch(`${API_BASE_URL}/analyze-bill`, {
         method: "POST",
-        body: formData
+        body: formData,
       });
 
       if (!response.ok) {
@@ -109,7 +109,7 @@ function App() {
       setBillResult(data);
     } catch (error) {
       console.error("Bill analysis error:", error);
-      setBillError("AI bill analysis is temporarily unavailable. Please check backend Gemini configuration or try again later.");
+      setBillError("AI bill analysis is temporarily unavailable. Please try again later.");
     } finally {
       setLoadingBill(false);
     }
@@ -138,70 +138,107 @@ function App() {
       setActionPlan(data);
     } catch (error) {
       console.error("Action plan generation error:", error);
-      setActionPlanError(error.message || "Failed to generate action plan. Please try again.");
+      setActionPlanError("AI care plan generation is temporarily unavailable. Please try again later.");
     } finally {
       setActionPlanLoading(false);
     }
   };
 
+  const handleUseDemoPrescription = () => {
+    setPrescriptionResult(demoPrescription);
+    setDemoMode(true);
+    setPrescriptionError("");
+  };
+
+  const handleUseDemoBill = () => {
+    setBillResult(demoBill);
+    setDemoMode(true);
+    setBillError("");
+  };
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="mx-auto max-w-6xl px-4 py-8">
-        <header className="mb-10 rounded-3xl border border-slate-800 bg-slate-900/80 p-8 shadow-xl shadow-slate-950/40">
+    <div className="min-h-screen overflow-hidden bg-slate-950 text-slate-100">
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_16%_18%,rgba(34,211,238,0.18),transparent_28%),radial-gradient(circle_at_82%_8%,rgba(59,130,246,0.18),transparent_24%),linear-gradient(135deg,#020617_0%,#07111f_52%,#020617_100%)]" />
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <header className="mb-8 rounded-[2rem] border border-cyan-300/10 bg-white/[0.04] p-5 shadow-2xl shadow-cyan-950/30 backdrop-blur-xl sm:p-8">
           <Hero />
-          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="max-w-2xl text-slate-300">
-              Use ArogyaSahayak AI to upload prescription and bill documents, then receive clear and patient-friendly guidance with caregiver support.
-            </p>
+          <div className="mt-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="grid gap-3 text-sm text-slate-300 sm:grid-cols-3">
+              {["Upload", "AI Analysis", "Care Guidance"].map((step, index) => (
+                <div
+                  key={step}
+                  className="rounded-2xl border border-white/10 bg-slate-950/45 px-4 py-3 shadow-lg shadow-slate-950/20"
+                >
+                  <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-cyan-400/15 text-xs font-bold text-cyan-200">
+                    {index + 1}
+                  </span>
+                  {step}
+                </div>
+              ))}
+            </div>
             <LanguageSelector language={language} onChange={setLanguage} />
           </div>
         </header>
 
-        <section className="space-y-8">
-          <UploadPrescription
-            onUpload={handleAnalyzePrescription}
-            loading={loadingPrescription}
-            error={prescriptionError}
-            demoMode={demoMode}
-          />
+        <section className="grid gap-8 xl:grid-cols-[minmax(0,1.08fr)_minmax(360px,0.92fr)]">
+          <div className="space-y-8">
+            <UploadPrescription
+              onUpload={handleAnalyzePrescription}
+              loading={loadingPrescription}
+              error={prescriptionError}
+              demoMode={demoMode}
+              onUseDemo={handleUseDemoPrescription}
+            />
 
-          {loadingPrescription && <LoadingSpinner />}
+            {loadingPrescription && <LoadingSpinner message="Extracting medicines..." />}
 
-          {prescriptionResult && !loadingPrescription && (
-            <div className="space-y-6">
-              <AnalysisResult result={prescriptionResult} />
+            {prescriptionResult && !loadingPrescription && (
+              <div className="space-y-6">
+                <AnalysisResult result={prescriptionResult} />
 
-              <div className="flex flex-col gap-4 rounded-3xl border border-slate-800 bg-slate-900/95 p-6 shadow-xl shadow-slate-950/20 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-slate-300">
-                  Generate a custom action plan from this prescription analysis.
-                </p>
-                <button
-                  type="button"
-                  onClick={handleGenerateActionPlan}
-                  disabled={actionPlanLoading}
-                  className="inline-flex items-center justify-center rounded-3xl bg-cyan-500 px-6 py-3 text-base font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {actionPlanLoading ? "Generating..." : "Generate Action Plan"}
-                </button>
+                <div className="rounded-[2rem] border border-cyan-300/10 bg-white/[0.04] p-5 shadow-xl shadow-slate-950/20 backdrop-blur-xl sm:p-6">
+                  <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                    <div>
+                      <p className="text-sm uppercase tracking-[0.22em] text-cyan-200">Care workflow</p>
+                      <p className="mt-2 text-slate-300">
+                        Generate a custom action plan from this prescription analysis.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleGenerateActionPlan}
+                      disabled={actionPlanLoading}
+                      className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-cyan-400 px-6 py-3 text-base font-bold text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:-translate-y-0.5 hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {actionPlanLoading ? "Generating care plan..." : "Generate Action Plan"}
+                    </button>
+                  </div>
+
+                  {actionPlanLoading && <LoadingSpinner message="Generating care plan..." compact />}
+
+                  {actionPlanError && (
+                    <div className="mt-4 rounded-2xl border border-rose-300/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-100">
+                      {actionPlanError}
+                    </div>
+                  )}
+                </div>
+
+                <CaregiverSummary summary={prescriptionResult.caregiver_summary} />
+                <ActionPlan plan={actionPlan} />
               </div>
+            )}
+          </div>
 
-              {actionPlanError && (
-                <p className="text-sm text-rose-300">{actionPlanError}</p>
-              )}
-
-              <CaregiverSummary summary={prescriptionResult.caregiver_summary} />
-
-              {actionPlan && <ActionPlan plan={actionPlan} />}
-            </div>
-          )}
-
-          <BillBreakdown
-            onUpload={handleAnalyzeBill}
-            loading={loadingBill}
-            error={billError}
-            result={billResult}
-            demoMode={demoMode}
-          />
+          <div className="space-y-8">
+            <BillBreakdown
+              onUpload={handleAnalyzeBill}
+              loading={loadingBill}
+              error={billError}
+              result={billResult}
+              demoMode={demoMode}
+              onUseDemo={handleUseDemoBill}
+            />
+          </div>
         </section>
       </div>
     </div>

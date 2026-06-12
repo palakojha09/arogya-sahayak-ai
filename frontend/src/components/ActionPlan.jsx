@@ -1,34 +1,62 @@
-export default function ActionPlan({ plan }) {
+function PlanCard({ icon, title, items, tone }) {
   return (
-    <section className="rounded-3xl border border-slate-800 bg-slate-900/95 p-8 shadow-xl shadow-slate-950/20">
-      <h3 className="text-2xl font-semibold text-white">Action Plan</h3>
-      <div className="mt-6 grid gap-6 lg:grid-cols-3">
-        <div className="rounded-3xl bg-slate-950/90 p-6">
-          <h4 className="text-lg font-semibold text-white">Reminders</h4>
-          <ul className="mt-4 list-disc space-y-2 pl-5 text-slate-300">
-            {plan?.reminders?.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
+    <div className={`rounded-[1.5rem] border p-5 shadow-lg shadow-slate-950/20 ${tone}`}>
+      <div className="flex items-center gap-3">
+        <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-2xl">{icon}</span>
+        <h4 className="text-lg font-bold text-white">{title}</h4>
+      </div>
+      <ul className="mt-5 space-y-3">
+        {(items || []).map((item, index) => (
+          <li key={`${title}-${index}`} className="flex gap-3 rounded-2xl bg-slate-950/35 p-3 text-sm leading-6 text-slate-200">
+            <span className="mt-0.5 h-5 w-5 shrink-0 rounded-full bg-cyan-300/15 text-center text-xs font-bold text-cyan-100">
+              {index + 1}
+            </span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
-        <div className="rounded-3xl bg-slate-950/90 p-6">
-          <h4 className="text-lg font-semibold text-white">Caregiver Actions</h4>
-          <ul className="mt-4 list-disc space-y-2 pl-5 text-slate-300">
-            {plan?.caregiver_actions?.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
+export default function ActionPlan({ plan }) {
+  const hasPlan = plan?.reminders?.length || plan?.caregiver_actions?.length || plan?.next_steps?.length;
 
-        <div className="rounded-3xl bg-slate-950/90 p-6">
-          <h4 className="text-lg font-semibold text-white">Next Steps</h4>
-          <ul className="mt-4 list-disc space-y-2 pl-5 text-slate-300">
-            {plan?.next_steps?.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
+  if (!hasPlan) {
+    return (
+      <section className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 text-center shadow-xl shadow-slate-950/20 backdrop-blur-xl">
+        <h3 className="text-2xl font-bold text-white">Action Plan</h3>
+        <p className="mt-3 text-slate-300">Generate an action plan after prescription analysis.</p>
+      </section>
+    );
+  }
+
+  return (
+    <section className="rounded-[2rem] border border-cyan-300/10 bg-white/[0.04] p-5 shadow-xl shadow-slate-950/20 backdrop-blur-xl sm:p-7">
+      <div>
+        <p className="text-sm uppercase tracking-[0.22em] text-cyan-200">Care Guidance</p>
+        <h3 className="mt-2 text-2xl font-bold text-white">Action Plan</h3>
+      </div>
+
+      <div className="mt-6 grid gap-5 lg:grid-cols-3">
+        <PlanCard
+          icon="⏰"
+          title="Reminders"
+          items={plan.reminders}
+          tone="border-cyan-300/15 bg-cyan-300/10"
+        />
+        <PlanCard
+          icon="👨‍👩‍👧"
+          title="Caregiver Actions"
+          items={plan.caregiver_actions}
+          tone="border-blue-300/15 bg-blue-400/10"
+        />
+        <PlanCard
+          icon="✅"
+          title="Next Steps"
+          items={plan.next_steps}
+          tone="border-emerald-300/15 bg-emerald-400/10"
+        />
       </div>
     </section>
   );
