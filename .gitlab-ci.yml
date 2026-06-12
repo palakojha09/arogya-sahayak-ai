@@ -1,26 +1,51 @@
 stages:
-  - quality
+  - lint
+  - format
+  - type_check
+  - test
+  - coverage
   - security
 
-quality-checks:
-  stage: quality
+default:
   image: python:3.11
 
-  before_script:
-    - pip install ruff mypy pip-audit pytest pytest-cov
+before_script:
+  - pip install ruff mypy pytest pytest-cov pip-audit
 
+lint:
+  stage: lint
   script:
     - ruff check .
+
+format:
+  stage: format
+  script:
     - ruff format --check .
+
+type_check:
+  stage: type_check
+  script:
     - mypy backend
-    - pip-audit
+
+test:
+  stage: test
+  script:
+    - pytest
+
+coverage:
+  stage: coverage
+  script:
     - pytest --cov=backend --cov-report=term
+
+dependency_audit:
+  stage: security
+  script:
+    - pip-audit
 
 gitleaks:
   stage: security
   image:
     name: zricethezav/gitleaks:latest
     entrypoint: [""]
-
   script:
     - gitleaks detect --source . --verbose
