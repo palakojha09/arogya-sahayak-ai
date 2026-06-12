@@ -104,14 +104,11 @@ function App() {
       }
 
       const data = await response.json();
+      console.log("Bill analysis response:", data);
       setBillResult(data);
     } catch (error) {
       console.error("Bill analysis error:", error);
-      const message = error.message || "Unable to analyze bill. Please try again.";
-      const friendlyMessage = /quota|limit|rate limit|Gemini/i.test(message)
-        ? "Bill analysis failed because the AI service quota was reached. Please try again later."
-        : "Unable to analyze bill. Please try again.";
-      setBillError(friendlyMessage);
+      setBillError("AI bill analysis is temporarily unavailable. Please check backend Gemini configuration or try again later.");
     } finally {
       setLoadingBill(false);
     }
