@@ -62,6 +62,7 @@ function App() {
 
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("language", language);
 
     try {
       const response = await fetch(`${API_BASE_URL}/analyze-prescription`, {
@@ -92,6 +93,7 @@ function App() {
 
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("language", language);
 
     try {
       const response = await fetch(`${API_BASE_URL}/analyze-bill`, {
