@@ -11,7 +11,7 @@ async def analyze_prescription_file(file: UploadFile, language: str = "English")
 
     file_bytes = await file.read()
 
-    prompt = """
+    prompt = f"""
 You are ArogyaSahayak AI.
 
 Return all summaries, explanations, schedules,
@@ -22,10 +22,10 @@ Analyze the prescription image carefully.
 Return ONLY valid JSON.
 
 {
-  "patient_summary": "Short summary",
+        "patient_summary": "Short summary",
   "medicines": [
     {
-      "name": "Medicine name",
+            "name": "Medicine name",
       "dose": "Dose",
       "timing": "Timing",
       "purpose": "Purpose"

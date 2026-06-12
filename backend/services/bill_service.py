@@ -50,12 +50,18 @@ Bill text:
         except Exception as exc:
             raise RuntimeError(f"Unable to read PDF bill: {str(exc)}") from exc
 
-    prompt = """
-You are ArogyaSahayak AI. Analyze the uploaded bill image and explain it in simple language.
+    prompt = f"""
+You are ArogyaSahayak AI.
+
+Return all explanations and summaries in {language}.
+
+Analyze the uploaded bill image and explain it in simple language.
+
 Return ONLY valid JSON with these keys:
 {
-  "bill_summary": "Short summary of the bill in simple language.",
-  "cost_categories": [{"category": "Medicine", "amount": "500", "explanation": "Why this charge appears"}],
+        "bill_summary": "Short summary of the bill in simple language.",
+  "cost_categories": [{
+            "category": "Medicine", "amount": "500", "explanation": "Why this charge appears"}],
   "expensive_components": ["Expensive or unusual charges"],
   "simple_explanation": "Plain-language explanation of what the patient should understand."
 }
