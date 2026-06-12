@@ -249,13 +249,3 @@ function App() {
 
 export default App;
 
-const handleAnalyzePrescription = async (file) => {
-  console.log("Selected language:", language);
-
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("language", language);
-
- console.log("LANGUAGE STATE:", language);
-console.log("FORM DATA:", [...formData.entries()]);
-}
