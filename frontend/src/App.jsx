@@ -256,4 +256,6 @@ const handleAnalyzePrescription = async (file) => {
   formData.append("file", file);
   formData.append("language", language);
 
-  console.log([...formData.entries()]);
+ console.log("LANGUAGE STATE:", language);
+console.log("FORM DATA:", [...formData.entries()]);
+}
