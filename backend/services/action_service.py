@@ -28,37 +28,28 @@ Prescription analysis:
 
         return {
             "reminders": result.get(
-                "reminders",
-                ["Take medicines on time", "Keep a note of side effects"]
+                "reminders", ["Take medicines on time", "Keep a note of side effects"]
             ),
             "caregiver_actions": result.get(
-                "caregiver_actions",
-                ["Monitor the patient", "Confirm medicine timings"]
+                "caregiver_actions", ["Monitor the patient", "Confirm medicine timings"]
             ),
             "next_steps": result.get(
-                "next_steps",
-                ["Follow doctor's advice", "Seek help if symptoms worsen"]
+                "next_steps", ["Follow doctor's advice", "Seek help if symptoms worsen"]
             ),
             "support_note": result.get(
                 "support_note",
-                "Please consult a qualified doctor for medical concerns."
+                "Please consult a qualified doctor for medical concerns.",
             ),
             "source": "gemini_text",
         }
 
     except Exception:
         return {
-            "reminders": [
-                "Take medicines on time",
-                "Drink enough water"
-            ],
-            "caregiver_actions": [
-                "Monitor symptoms",
-                "Ensure medicine adherence"
-            ],
+            "reminders": ["Take medicines on time", "Drink enough water"],
+            "caregiver_actions": ["Monitor symptoms", "Ensure medicine adherence"],
             "next_steps": [
                 "Schedule a follow-up visit",
-                "Contact doctor if symptoms worsen"
+                "Contact doctor if symptoms worsen",
             ],
             "support_note": "Demo mode active. AI service unavailable.",
             "source": "fallback",

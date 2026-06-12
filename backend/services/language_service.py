@@ -26,5 +26,5 @@ Source text:
             "translated_text": text,
             "simplified_explanation": text,
             "target_language": target_language,
-            "source": "fallback"
+            "source": "fallback",
         }
