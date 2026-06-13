@@ -4,11 +4,11 @@ from fastapi import Body, FastAPI, File, HTTPException, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from services.action_service import generate_action_plan
-from services.bill_service import analyze_bill_file
-from services.gemini_service import ai_test as run_ai_test
-from services.language_service import translate_text
-from services.prescription_service import analyze_prescription_file
+from backend.services.action_service import generate_action_plan
+from backend.services.bill_service import analyze_bill_file
+from backend.services.gemini_service import ai_test as run_ai_test
+from backend.services.language_service import translate_text
+from backend.services.prescription_service import analyze_prescription_file
 
 app = FastAPI(
     title="ArogyaSahayak AI Backend",

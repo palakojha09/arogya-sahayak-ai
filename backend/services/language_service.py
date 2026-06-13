@@ -1,4 +1,4 @@
-from services.gemini_service import parse_json_response, text_prompt
+from backend.services.gemini_service import parse_json_response, text_prompt
 
 
 def translate_text(text: str, target_language: str):

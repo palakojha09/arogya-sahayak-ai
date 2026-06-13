@@ -3,7 +3,11 @@ from io import BytesIO
 from fastapi import UploadFile
 from pypdf import PdfReader
 
-from services.gemini_service import image_prompt, parse_json_response, text_prompt
+from backend.services.gemini_service import (
+    image_prompt,
+    parse_json_response,
+    text_prompt,
+)
 
 
 async def analyze_bill_file(file: UploadFile, language: str = "English"):

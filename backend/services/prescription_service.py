@@ -1,13 +1,15 @@
 from fastapi import UploadFile
 
-from services.gemini_service import (
+from backend.services.gemini_service import (
     image_prompt,
     parse_json_response,
 )
 
 
-async def analyze_prescription_file(file: UploadFile, language: str = "English"):
-    """Analyze prescription image."""
+async def analyze_prescription_file(file: UploadFile, language="English"):
+    print("================================")
+    print("LANGUAGE RECEIVED:", language)
+    print("================================")
 
     file_bytes = await file.read()
 
@@ -21,15 +23,15 @@ Analyze the prescription image carefully.
 
 Return ONLY valid JSON.
 
-{
-        "patient_summary": "Short summary",
+{{
+  "patient_summary": "Short summary",
   "medicines": [
-    {
-            "name": "Medicine name",
+    {{
+      "name": "Medicine name",
       "dose": "Dose",
       "timing": "Timing",
       "purpose": "Purpose"
-    }
+    }}
   ],
   "dosage_schedule": "Simple schedule",
   "precautions": [
@@ -37,7 +39,7 @@ Return ONLY valid JSON.
   ],
   "simple_explanation": "Easy explanation",
   "caregiver_summary": "Caregiver guidance"
-}
+}}
 
 IMPORTANT:
 - Return ONLY JSON
@@ -49,24 +51,20 @@ IMPORTANT:
 
     try:
         raw_response = image_prompt(file_bytes, prompt)
+        print("RAW GEMINI RESPONSE:")
+        print(raw_response)
 
         result = parse_json_response(raw_response)
 
-    except Exception:
+    except Exception as e:
+        print("GEMINI ERROR:", repr(e))
         return {
             "patient_summary": "Demo mode active",
-            "medicines": [
-                {
-                    "name": "Sample Medicine",
-                    "dose": "1 tablet",
-                    "timing": "After food",
-                    "purpose": "Demonstration",
-                }
-            ],
-            "dosage_schedule": "Take medicine as prescribed.",
-            "precautions": ["Follow doctor advice"],
-            "simple_explanation": "AI service temporarily unavailable. Showing demo data.",
-            "caregiver_summary": "Ensure medicines are taken on time.",
+            "medicines": [],
+            "dosage_schedule": "",
+            "precautions": [],
+            "simple_explanation": str(e),
+            "caregiver_summary": "",
             "source": "fallback",
         }
 
@@ -74,12 +72,8 @@ IMPORTANT:
         "patient_summary": result.get("patient_summary", "Not available"),
         "medicines": result.get("medicines", []),
         "dosage_schedule": result.get("dosage_schedule", "Not available"),
-        "precautions": result.get("precautions", ["Please follow doctor's advice"]),
-        "simple_explanation": result.get(
-            "simple_explanation", "No simple explanation available."
-        ),
-        "caregiver_summary": result.get(
-            "caregiver_summary", "No caregiver summary available."
-        ),
+        "precautions": result.get("precautions", []),
+        "simple_explanation": result.get("simple_explanation", ""),
+        "caregiver_summary": result.get("caregiver_summary", ""),
         "source": "gemini_vision",
     }
