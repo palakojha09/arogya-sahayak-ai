@@ -122,7 +122,14 @@ export default function AnalysisResult({ result, language }) {
       </div>
 
       <div className="mt-6">
-        <InsightCard title={t.precautions} value={result.precautions} accent="amber" />
+        <InsightCard
+          title={t.precautions}
+          value={
+            Array.isArray(result.precautions)
+              ? result.precautions.join(", ")
+              : result.precautions
+          }
+        />
       </div>
     </section>
   );
