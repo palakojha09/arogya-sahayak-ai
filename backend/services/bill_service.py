@@ -3,7 +3,7 @@ from io import BytesIO
 from fastapi import UploadFile
 from pypdf import PdfReader
 
-from backend.services.gemini_service import (
+from services.gemini_service import (
     image_prompt,
     parse_json_response,
     text_prompt,

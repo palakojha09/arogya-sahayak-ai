@@ -1,6 +1,6 @@
 import json
 
-from backend.services.gemini_service import parse_json_response, text_prompt
+from services.gemini_service import parse_json_response, text_prompt
 
 
 def generate_action_plan(prescription_analysis: dict):
