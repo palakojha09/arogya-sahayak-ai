@@ -1,4 +1,4 @@
-const detailValue = (value) => value || "Not specified";
+const detailValue = (value) => value || "";
 
 function InsightCard({ title, value, accent = "cyan" }) {
   const accentClass = accent === "amber" ? "border-amber-300/25 bg-amber-400/10" : "border-cyan-300/15 bg-cyan-300/10";
@@ -11,9 +11,12 @@ function InsightCard({ title, value, accent = "cyan" }) {
   );
 }
 
-export default function AnalysisResult({ result }) {
+export default function AnalysisResult({ result, language }) {
+
   const t = {
+
   prescriptionSummary:
+
     language === "Hindi" ? "प्रिस्क्रिप्शन सारांश" : "Prescription Summary",
 
   analysisReady:
@@ -49,7 +52,11 @@ export default function AnalysisResult({ result }) {
     language === "Hindi"
       ? "स्पष्ट रूप से पता नहीं चला।"
       : "Not clearly detected.",
-};
+
+      };
+
+      const medicines = result.medicines || [];
+
 
   return (
     <section className="rounded-[2rem] border border-cyan-300/10 bg-white/[0.04] p-5 shadow-xl shadow-slate-950/20 backdrop-blur-xl sm:p-7">
