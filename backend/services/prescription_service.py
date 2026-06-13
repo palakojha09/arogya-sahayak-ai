@@ -50,6 +50,7 @@ IMPORTANT:
 """
 
     try:
+        print("CALLING GEMINI...")
         raw_response = image_prompt(file_bytes, prompt)
         print("RAW GEMINI RESPONSE:")
         print(raw_response)
@@ -57,7 +58,7 @@ IMPORTANT:
         result = parse_json_response(raw_response)
 
     except Exception as e:
-        print("GEMINI ERROR:", repr(e))
+        print("GEMINI ERROR:", str(e))
         return {
             "patient_summary": "Demo mode active",
             "medicines": [],
