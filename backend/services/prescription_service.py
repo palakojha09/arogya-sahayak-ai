@@ -1,6 +1,6 @@
 from fastapi import UploadFile
 
-from backend.services.gemini_service import (
+from services.gemini_service import (
     image_prompt,
     parse_json_response,
 )
