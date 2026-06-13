@@ -13,6 +13,16 @@ async def analyze_prescription_file(file: UploadFile, language="English"):
 
     file_bytes = await file.read()
 
+    return {
+        "patient_summary": f"Language selected: {language}",
+        "medicines": [],
+        "dosage_schedule": "",
+        "precautions": [],
+        "simple_explanation": f"Response generated in {language}",
+        "caregiver_summary": "",
+        "source": "demo",
+    }
+
     prompt = f"""
 You are ArogyaSahayak AI.
 
