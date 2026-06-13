@@ -244,8 +244,14 @@ function App() {
                   )}
                 </div>
 
-                <CaregiverSummary summary={prescriptionResult.caregiver_summary} />
-                <ActionPlan plan={actionPlan} />
+                <CaregiverSummary
+                  summary={prescriptionResult.caregiver_summary}
+                  language={language}
+                />
+                <ActionPlan
+                  plan={actionPlan}
+                  language={language}
+                />
               </div>
             )}
           </div>

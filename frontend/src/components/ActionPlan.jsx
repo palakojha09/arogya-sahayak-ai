@@ -19,13 +19,17 @@ function PlanCard({ icon, title, items, tone }) {
   );
 }
 
-export default function ActionPlan({ plan }) {
+export default function ActionPlan({ plan, language }) {
   const hasPlan = plan?.reminders?.length || plan?.caregiver_actions?.length || plan?.next_steps?.length;
 
   if (!hasPlan) {
     return (
       <section className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 text-center shadow-xl shadow-slate-950/20 backdrop-blur-xl">
-        <h3 className="text-2xl font-bold text-white">Action Plan</h3>
+        <h3 className="text-2xl font-bold text-white">
+          {language === "Hindi"
+            ? "कार्य योजना"
+            : "Action Plan"}
+        </h3>
         <p className="mt-3 text-slate-300">Generate an action plan after prescription analysis.</p>
       </section>
     );
@@ -34,26 +38,34 @@ export default function ActionPlan({ plan }) {
   return (
     <section className="rounded-[2rem] border border-cyan-300/10 bg-white/[0.04] p-5 shadow-xl shadow-slate-950/20 backdrop-blur-xl sm:p-7">
       <div>
-        <p className="text-sm uppercase tracking-[0.22em] text-cyan-200">Care Guidance</p>
+        <p className="text-sm uppercase tracking-[0.22em] text-cyan-200">
+          {language === "Hindi"
+            ? "देखभाल मार्गदर्शन"
+            : "Care Guidance"}
+        </p>
         <h3 className="mt-2 text-2xl font-bold text-white">Action Plan</h3>
       </div>
 
       <div className="mt-6 grid gap-5 lg:grid-cols-3">
         <PlanCard
           icon="⏰"
-          title="Reminders"
+          title={language === "Hindi" ? "अनुस्मारक" : "Reminders"}
           items={plan.reminders}
           tone="border-cyan-300/15 bg-cyan-300/10"
         />
         <PlanCard
           icon="👨‍👩‍👧"
-          title="Caregiver Actions"
+          title={language === "Hindi"
+            ? "देखभालकर्ता कार्य"
+            : "Caregiver Actions"}
           items={plan.caregiver_actions}
           tone="border-blue-300/15 bg-blue-400/10"
         />
         <PlanCard
           icon="✅"
-          title="Next Steps"
+          title={language === "Hindi"
+            ? "अगले कदम"
+            : "Next Steps"}
           items={plan.next_steps}
           tone="border-emerald-300/15 bg-emerald-400/10"
         />

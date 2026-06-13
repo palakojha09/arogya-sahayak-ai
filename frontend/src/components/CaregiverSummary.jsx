@@ -1,4 +1,4 @@
-export default function CaregiverSummary({ summary }) {
+export default function CaregiverSummary({ summary, language }) {
   if (!summary) return null;
 
   return (
@@ -8,8 +8,14 @@ export default function CaregiverSummary({ summary }) {
           👨‍👩‍👧
         </span>
         <div>
-          <p className="text-sm uppercase tracking-[0.22em] text-emerald-100">Important</p>
-          <h3 className="mt-2 text-2xl font-bold text-white">Caregiver Summary</h3>
+          <p className="text-sm uppercase tracking-[0.22em] text-emerald-100">
+            {language === "Hindi" ? "महत्वपूर्ण" : "Important"}
+          </p>
+          <h3 className="mt-2 text-2xl font-bold text-white">
+            {language === "Hindi"
+              ? "देखभालकर्ता सारांश"
+              : "Caregiver Summary"}
+          </h3>
           <p className="mt-4 leading-8 text-emerald-50/90">{summary}</p>
         </div>
       </div>
