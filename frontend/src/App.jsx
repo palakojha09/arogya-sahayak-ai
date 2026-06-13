@@ -10,6 +10,7 @@ import BillBreakdown from "./components/BillBreakdown.jsx";
 import CaregiverSummary from "./components/CaregiverSummary.jsx";
 import ActionPlan from "./components/ActionPlan.jsx";
 import LoadingSpinner from "./components/LoadingSpinner.jsx";
+import translations from "./translations";
 
 const demoPrescription = {
   patient_summary: "Mrs. Sharma is prescribed medicines for blood pressure and digestion.",
@@ -41,6 +42,7 @@ const demoBill = {
 
 function App() {
   const [language, setLanguage] = useState("English");
+  const t = translations[language] || translations.English;
   const [prescriptionResult, setPrescriptionResult] = useState(null);
   const [billResult, setBillResult] = useState(null);
   const [loadingPrescription, setLoadingPrescription] = useState(false);
@@ -166,7 +168,11 @@ function App() {
           <Hero />
           <div className="mt-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="grid gap-3 text-sm text-slate-300 sm:grid-cols-3">
-              {["Upload", "AI Analysis", "Care Guidance"].map((step, index) => (
+              {[
+                  language === "Hindi" ? "अपलोड" : "Upload",
+                  language === "Hindi" ? "एआई विश्लेषण" : "AI Analysis",
+                  language === "Hindi" ? "देखभाल मार्गदर्शन" : "Care Guidance",
+                ].map((step, index) => (
                 <div
                   key={step}
                   className="rounded-2xl border border-white/10 bg-slate-950/45 px-4 py-3 shadow-lg shadow-slate-950/20"
@@ -196,14 +202,21 @@ function App() {
 
             {prescriptionResult && !loadingPrescription && (
               <div className="space-y-6">
-                <AnalysisResult result={prescriptionResult} />
+                <AnalysisResult
+                  result={prescriptionResult}
+                  language={language}
+                />
 
                 <div className="rounded-[2rem] border border-cyan-300/10 bg-white/[0.04] p-5 shadow-xl shadow-slate-950/20 backdrop-blur-xl sm:p-6">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div>
-                      <p className="text-sm uppercase tracking-[0.22em] text-cyan-200">Care workflow</p>
+                      <p className="text-sm uppercase tracking-[0.22em] text-cyan-200">
+                        {language === "Hindi" ? "देखभाल प्रक्रिया" : "Care workflow"}
+                      </p>
                       <p className="mt-2 text-slate-300">
-                        Generate a custom action plan from this prescription analysis.
+                        {language === "Hindi"
+                          ? "इस प्रिस्क्रिप्शन विश्लेषण से एक कार्य योजना बनाएं।"
+                          : "Generate a custom action plan from this prescription analysis."}
                       </p>
                     </div>
                     <button
@@ -212,7 +225,13 @@ function App() {
                       disabled={actionPlanLoading}
                       className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-cyan-400 px-6 py-3 text-base font-bold text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:-translate-y-0.5 hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60"
                     >
-                      {actionPlanLoading ? "Generating care plan..." : "Generate Action Plan"}
+                      {actionPlanLoading
+                        ? (language === "Hindi"
+                          ? "कार्य योजना बनाई जा रही है..."
+                          : "Generating care plan...")
+                        : (language === "Hindi"
+                          ? "कार्य योजना बनाएं"
+                          : "Generate Action Plan")}
                     </button>
                   </div>
 
