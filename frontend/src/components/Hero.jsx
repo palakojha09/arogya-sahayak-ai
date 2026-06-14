@@ -1,10 +1,12 @@
+export default function Hero({ t }) {
+
 const badges = [
   t.prescriptionAI || "Prescription AI",
   t.billBreakdown || "Bill Breakdown",
   t.caregiverPlan || "Caregiver Plan",
   t.multilingualSupport || "Multilingual Support",
 ];
-export default function Hero({ t }) {
+
   return (
     <div className="relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-950/55 p-6 shadow-2xl shadow-slate-950/30 sm:p-8">
       <div className="absolute right-0 top-0 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
