@@ -25,7 +25,16 @@ async def analyze_bill_file(file: UploadFile, language: str = "English"):
             prompt = f"""
 You are ArogyaSahayak AI. 
 
-Return all explanations and summaries in {language}.
+IMPORTANT:
+Return ALL patient-facing text in {language}.
+
+This includes:
+- bill_summary
+- explanations
+- expensive_components
+- simple_explanation
+
+Charge names may remain in English if required.
 
 Explain this hospital bill in simple language for a patient.
 Return ONLY valid JSON with these keys:

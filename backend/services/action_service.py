@@ -3,12 +3,17 @@ import json
 from services.gemini_service import parse_json_response, text_prompt
 
 
-def generate_action_plan(prescription_analysis: dict):
+def generate_action_plan(prescription_analysis: dict, language="English"):
     """Generate reminders, caregiver actions, and next-step guidance."""
 
     prompt = f"""
-You are ArogyaSahayak AI. Based on the prescription analysis, create a simple action plan for a patient and caregiver.
+You are ArogyaSahayak AI.
 
+Return all reminders, caregiver actions,
+next steps and support notes in {language}.
+
+Based on the prescription analysis,
+create a simple action plan for a patient and caregiver.
 Return ONLY valid JSON:
 
 {{

@@ -130,7 +130,10 @@ function App() {
       const response = await fetch(`${API_BASE_URL}/generate-action-plan`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prescription_analysis: prescriptionResult }),
+        body: JSON.stringify({
+          prescription_analysis: prescriptionResult,
+          language: language,
+        }),
       });
 
       if (!response.ok) {

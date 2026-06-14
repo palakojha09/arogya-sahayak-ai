@@ -42,6 +42,7 @@ class TranslateRequest(BaseModel):
 
 class ActionPlanRequest(BaseModel):
     prescription_analysis: dict
+    language: str = "English"
 
 
 @app.get("/health")
@@ -103,7 +104,10 @@ async def translate(request: TranslateRequest):
 @app.post("/generate-action-plan")
 async def generate_plan(request: ActionPlanRequest = Body(...)):
     try:
-        return generate_action_plan(request.prescription_analysis)
+        return generate_action_plan(
+            request.prescription_analysis,
+            request.language,
+        )
     except Exception as exc:
         raise HTTPException(
             status_code=500, detail=f"Action-plan generation failed: {str(exc)}"

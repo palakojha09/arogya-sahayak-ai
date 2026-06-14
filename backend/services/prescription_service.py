@@ -16,8 +16,17 @@ async def analyze_prescription_file(file: UploadFile, language="English"):
     prompt = f"""
 You are ArogyaSahayak AI.
 
-Return all summaries, explanations, schedules,
-and caregiver guidance in {language}.
+IMPORTANT:
+Return ALL patient-facing text in {language}.
+
+This includes:
+- patient_summary
+- dosage_schedule
+- precautions
+- simple_explanation
+- caregiver_summary
+
+Medicine names may remain in English.
 
 Analyze the prescription image carefully.
 
