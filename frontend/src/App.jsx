@@ -169,9 +169,9 @@ function App() {
           <div className="mt-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="grid gap-3 text-sm text-slate-300 sm:grid-cols-3">
               {[
-                  language === "Hindi" ? "अपलोड" : "Upload",
-                  language === "Hindi" ? "एआई विश्लेषण" : "AI Analysis",
-                  language === "Hindi" ? "देखभाल मार्गदर्शन" : "Care Guidance",
+                  t.uploadStep || "Upload",
+                  t.analysisStep || "AI Analysis",
+                  t.guidanceStep || "Care Guidance",
                 ].map((step, index) => (
                 <div
                   key={step}

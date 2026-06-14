@@ -25,7 +25,7 @@ export default function UploadPrescription({
             🧾
           </div>
           <h2 className="text-2xl font-bold text-white">
-            Upload Prescription
+            {t.uploadPrescription}
           </h2>
           <p className="mt-2 max-w-2xl leading-7 text-slate-300">
             {t.uploadDescription || 

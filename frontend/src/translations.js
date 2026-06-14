@@ -82,6 +82,10 @@ const translations = {
     suspiciousCharges: "Suspicious Charges",
     aiBillExplanation: "AI Bill Explanation",
 
+    uploadStep: "Upload",
+analysisStep: "AI Analysis",
+guidanceStep: "Care Guidance",
+
   },
 
   Hindi: {
@@ -184,6 +188,10 @@ suspiciousCharges:
 aiBillExplanation:
   "एआई बिल व्याख्या",
 
+  uploadStep: "अपलोड",
+analysisStep: "एआई विश्लेषण",
+guidanceStep: "देखभाल मार्गदर्शन",
+
   },
 
   Telugu: {
@@ -285,6 +293,10 @@ suspiciousCharges:
 
 aiBillExplanation:
   "AI బిల్లు వివరణ",
+
+  uploadStep: "అప్‌లోడ్",
+analysisStep: "AI విశ్లేషణ",
+guidanceStep: "సంరక్షణ మార్గదర్శనం",
 
   },
 };
