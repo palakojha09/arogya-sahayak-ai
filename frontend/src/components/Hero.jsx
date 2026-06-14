@@ -1,6 +1,10 @@
-const badges = ["Prescription AI", "Bill Breakdown", "Caregiver Plan", "Multilingual Support"];
-
-export default function Hero() {
+const badges = [
+  t.prescriptionAI || "Prescription AI",
+  t.billBreakdown || "Bill Breakdown",
+  t.caregiverPlan || "Caregiver Plan",
+  t.multilingualSupport || "Multilingual Support",
+];
+export default function Hero({ t }) {
   return (
     <div className="relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-950/55 p-6 shadow-2xl shadow-slate-950/30 sm:p-8">
       <div className="absolute right-0 top-0 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl" />
@@ -11,7 +15,8 @@ export default function Hero() {
             ArogyaSahayak AI
           </h1>
           <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-300">
-            AI assistant for prescriptions, hospital bills, and caregiver guidance.
+            {t.heroDescription ||
+              "AI assistant for prescriptions, hospital bills, and caregiver guidance."}       
           </p>
 
           <div className="mt-7 flex flex-wrap gap-3">
@@ -28,13 +33,17 @@ export default function Hero() {
 
         <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.05] p-5 backdrop-blur">
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
-            <span className="text-sm text-slate-400">Care confidence</span>
+            <span className="text-sm text-slate-400">{t.careConfidence || "Care confidence"}</span>
             <span className="rounded-full bg-emerald-400/15 px-3 py-1 text-sm font-semibold text-emerald-200">
-              Live AI
+              {t.liveAI || "Live AI"}
             </span>
           </div>
           <div className="mt-5 space-y-4">
-            {["Prescription clarity", "Cost transparency", "Caregiver readiness"].map((item, index) => (
+            {[
+                t.prescriptionClarity || "Prescription clarity",
+                t.costTransparency || "Cost transparency",
+                t.caregiverReadiness || "Caregiver readiness",
+              ].map((item, index) => (
               <div key={item}>
                 <div className="mb-2 flex items-center justify-between text-sm">
                   <span className="text-slate-300">{item}</span>

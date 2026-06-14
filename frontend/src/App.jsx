@@ -165,7 +165,7 @@ function App() {
       <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_16%_18%,rgba(34,211,238,0.18),transparent_28%),radial-gradient(circle_at_82%_8%,rgba(59,130,246,0.18),transparent_24%),linear-gradient(135deg,#020617_0%,#07111f_52%,#020617_100%)]" />
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <header className="mb-8 rounded-[2rem] border border-cyan-300/10 bg-white/[0.04] p-5 shadow-2xl shadow-cyan-950/30 backdrop-blur-xl sm:p-8">
-          <Hero />
+          <Hero t={t} />
           <div className="mt-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="grid gap-3 text-sm text-slate-300 sm:grid-cols-3">
               {[
@@ -196,6 +196,7 @@ function App() {
               error={prescriptionError}
               demoMode={demoMode}
               onUseDemo={handleUseDemoPrescription}
+              t={t}
             />
 
             {loadingPrescription && <LoadingSpinner message="Extracting medicines..." />}
@@ -264,6 +265,7 @@ function App() {
               result={billResult}
               demoMode={demoMode}
               onUseDemo={handleUseDemoBill}
+              t={t}
             />
           </div>
         </section>

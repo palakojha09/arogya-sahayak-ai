@@ -1,6 +1,13 @@
 import { useRef, useState } from "react";
 
-export default function UploadPrescription({ onUpload, loading, error, demoMode, onUseDemo }) {
+export default function UploadPrescription({
+  onUpload,
+  loading,
+  error,
+  demoMode,
+  onUseDemo,
+  t,
+}) {
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInput = useRef(null);
 
@@ -17,9 +24,12 @@ export default function UploadPrescription({ onUpload, loading, error, demoMode,
           <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-300/10 text-2xl ring-1 ring-cyan-300/20">
             🧾
           </div>
-          <h2 className="text-2xl font-bold text-white">Upload Prescription</h2>
+          <h2 className="text-2xl font-bold text-white">
+            Upload Prescription
+          </h2>
           <p className="mt-2 max-w-2xl leading-7 text-slate-300">
-            Upload a prescription image to get a patient-friendly summary, medicine list, dosage schedule, and caregiver guidance.
+            {t.uploadDescription || 
+            "Upload a prescription image to get a patient-friendly summary, medicine list, dosage schedule, and caregiver guidance."}
           </p>
         </div>
         {demoMode && (
@@ -41,8 +51,8 @@ export default function UploadPrescription({ onUpload, loading, error, demoMode,
           <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-400/10 text-3xl ring-1 ring-cyan-300/20 transition group-hover:bg-cyan-400/15">
             +
           </span>
-          <span className="mt-4 block text-lg font-semibold text-white">Select prescription image</span>
-          <span className="mt-2 block text-sm text-slate-400">JPG, PNG, or other photo formats accepted.</span>
+          <span className="mt-4 block text-lg font-semibold text-white">{t.selectImage || "Select prescription image"}</span>
+          <span className="mt-2 block text-sm text-slate-400">{t.imageFormats || "JPG, PNG, or other photo formats accepted."}</span>
           {selectedFile && (
             <span className="mt-4 inline-flex max-w-full rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-sm font-medium text-cyan-100">
               <span className="truncate">{selectedFile.name}</span>
@@ -57,7 +67,7 @@ export default function UploadPrescription({ onUpload, loading, error, demoMode,
             disabled={loading}
             onClick={() => fileInput.current?.click()}
           >
-            Choose File
+            {t.chooseFile || "Choose File"}
           </button>
 
           <button
@@ -65,13 +75,15 @@ export default function UploadPrescription({ onUpload, loading, error, demoMode,
             className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-cyan-400 px-6 py-3 text-base font-bold text-slate-950 shadow-lg shadow-cyan-500/20 transition hover:-translate-y-0.5 hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60"
             disabled={loading || !selectedFile}
           >
-            {loading ? "Reading prescription..." : "Analyze Prescription"}
+            {loading
+              ? (t.readingPrescription || "Reading prescription...")
+              : t.analyzePrescription}
           </button>
         </div>
 
         {error && (
           <div className="rounded-2xl border border-rose-300/20 bg-rose-500/10 p-4 text-rose-100">
-            <p className="font-semibold">Prescription analysis unavailable</p>
+            <p className="font-semibold">{t.analysisUnavailable || "Prescription analysis unavailable"}</p>
             <p className="mt-1 text-sm text-rose-100/85">{error}</p>
             {onUseDemo && (
               <button
@@ -79,7 +91,7 @@ export default function UploadPrescription({ onUpload, loading, error, demoMode,
                 className="mt-3 rounded-xl bg-amber-300 px-4 py-2 text-sm font-bold text-slate-950 transition hover:bg-amber-200"
                 onClick={onUseDemo}
               >
-                Use Demo Data
+                {t.useDemo || "Use Demo Data"}
               </button>
             )}
           </div>

@@ -33,8 +33,15 @@ function ChargeItem({ item, fallback }) {
   );
 }
 
-export default function BillBreakdown({ onUpload, loading, error, result, demoMode, onUseDemo }) {
-  const [selectedFile, setSelectedFile] = useState(null);
+export default function BillBreakdown({
+  onUpload,
+  loading,
+  error,
+  result,
+  demoMode,
+  onUseDemo,
+  t,
+}) {  const [selectedFile, setSelectedFile] = useState(null);
   const fileInput = useRef(null);
   const breakdownItems = result?.breakdown ?? result?.charges ?? result?.categories;
   const summaryText = result?.bill_summary ?? result?.summary ?? result?.simple_explanation;
@@ -46,9 +53,9 @@ export default function BillBreakdown({ onUpload, loading, error, result, demoMo
           <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-300/10 text-2xl ring-1 ring-blue-300/20">
             🏥
           </div>
-          <h2 className="text-2xl font-bold text-white">Upload Hospital Bill</h2>
+          <h2 className="text-2xl font-bold text-white">{t.uploadBill}</h2>
           <p className="mt-2 leading-7 text-slate-300">
-            Upload a bill image or PDF for a clear breakdown of charges and a simple explanation.
+            {t.billDescription}
           </p>
         </div>
         {demoMode && (
@@ -72,8 +79,8 @@ export default function BillBreakdown({ onUpload, loading, error, result, demoMo
         <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-400/10 text-3xl ring-1 ring-blue-300/20 transition group-hover:bg-blue-400/15">
           +
         </span>
-        <div className="mt-4 text-lg font-semibold text-white">Select bill image or PDF</div>
-        <div className="mt-2 text-sm text-slate-400">Image or PDF supported for bill analysis.</div>
+        <div className="mt-4 text-lg font-semibold text-white">{t.selectBill}</div>
+        <div className="mt-2 text-sm text-slate-400">{t.billFormats}</div>
         {selectedFile && (
           <span className="mt-4 inline-flex max-w-full rounded-full border border-blue-300/20 bg-blue-300/10 px-3 py-1 text-sm font-medium text-blue-100">
             <span className="truncate">{selectedFile.name}</span>
@@ -88,7 +95,7 @@ export default function BillBreakdown({ onUpload, loading, error, result, demoMo
           disabled={loading}
           onClick={() => fileInput.current?.click()}
         >
-          Choose File
+          {t.chooseFile}
         </button>
         <button
           type="button"
@@ -96,21 +103,21 @@ export default function BillBreakdown({ onUpload, loading, error, result, demoMo
           disabled={!selectedFile || loading}
           onClick={() => selectedFile && onUpload(selectedFile)}
         >
-          {loading ? "Analyzing hospital bill..." : "Analyze Bill"}
+          {loading ? t.analyzingBill : t.analyzeBill}
         </button>
       </div>
 
       {error && (
         <div className="mt-5 rounded-2xl border border-rose-300/20 bg-rose-500/10 p-4 text-rose-100">
-          <p className="font-semibold">AI bill analysis is temporarily unavailable. Please try again later.</p>
-          <p className="mt-1 text-sm text-rose-100/80">You can retry the upload or use the demo sample for presentation mode.</p>
+          <p className="font-semibold">{t.billUnavailable}</p>
+          <p className="mt-1 text-sm text-rose-100/80">{t.billRetry}</p>
           {onUseDemo && (
             <button
               type="button"
               className="mt-3 rounded-xl bg-amber-300 px-4 py-2 text-sm font-bold text-slate-950 transition hover:bg-amber-200"
               onClick={onUseDemo}
             >
-              Use Demo Data
+              {t.useDemo}
             </button>
           )}
         </div>
@@ -120,18 +127,18 @@ export default function BillBreakdown({ onUpload, loading, error, result, demoMo
 
       {result && (
         <div className="mt-8 space-y-5">
-          <BillCard icon="💰" title="Total Amount" emphasis>
+          <BillCard icon="💰" title="{t.totalAmount}" emphasis>
             <p className="text-3xl font-bold text-white">{result.total_amount ?? result.total ?? "Not clearly detected"}</p>
           </BillCard>
 
           {summaryText && (
-            <BillCard icon="📄" title="Bill Summary">
+            <BillCard icon="📄" title="{t.billSummary}">
               <p className="leading-7 text-slate-300">{summaryText}</p>
             </BillCard>
           )}
 
           {breakdownItems?.length > 0 && (
-            <BillCard icon="🧾" title="Charge Breakdown">
+            <BillCard icon="🧾" title="{t.chargeBreakdown}">
               <div className="space-y-3">
                 {breakdownItems.map((item, index) => (
                   <ChargeItem key={`charge-${index}`} item={item} fallback={`Charge ${index + 1}`} />
@@ -141,7 +148,7 @@ export default function BillBreakdown({ onUpload, loading, error, result, demoMo
           )}
 
           {result.suspicious_charges?.length > 0 && (
-            <BillCard icon="⚠️" title="Suspicious Charges">
+            <BillCard icon="⚠️" title="{t.suspiciousCharges}">
               <div className="space-y-3">
                 {result.suspicious_charges.map((item, index) => (
                   <ChargeItem key={`suspicious-${index}`} item={item} fallback={`Charge ${index + 1}`} />
@@ -151,7 +158,7 @@ export default function BillBreakdown({ onUpload, loading, error, result, demoMo
           )}
 
           {result.raw_response && (
-            <BillCard icon="📄" title="AI Bill Explanation">
+            <BillCard icon="📄" title="{t.aiBillExplanation}">
               <pre className="max-h-80 overflow-auto whitespace-pre-wrap rounded-2xl border border-white/10 bg-slate-950/75 p-4 text-sm leading-6 text-slate-300">
                 {result.raw_response}
               </pre>
