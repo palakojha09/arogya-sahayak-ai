@@ -86,6 +86,10 @@ const translations = {
 analysisStep: "AI Analysis",
 guidanceStep: "Care Guidance",
 
+totalAmount: "Total Amount",
+billSummary: "Bill Summary",
+chargeBreakdown: "Charge Breakdown",
+
   },
 
   Hindi: {
@@ -192,6 +196,10 @@ aiBillExplanation:
 analysisStep: "एआई विश्लेषण",
 guidanceStep: "देखभाल मार्गदर्शन",
 
+totalAmount: "कुल राशि",
+billSummary: "बिल सारांश",
+chargeBreakdown: "शुल्क विवरण",
+
   },
 
   Telugu: {
@@ -297,6 +305,10 @@ aiBillExplanation:
   uploadStep: "అప్‌లోడ్",
 analysisStep: "AI విశ్లేషణ",
 guidanceStep: "సంరక్షణ మార్గదర్శనం",
+
+totalAmount: "మొత్తం మొత్తం",
+billSummary: "బిల్లు సారాంశం",
+chargeBreakdown: "ఖర్చుల వివరాలు",
 
   },
 };

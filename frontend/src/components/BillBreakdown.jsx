@@ -127,18 +127,28 @@ export default function BillBreakdown({
 
       {result && (
         <div className="mt-8 space-y-5">
-          <BillCard icon="💰" title="{t.totalAmount}" emphasis>
+          <BillCard
+          icon="💰"
+          title={t.totalAmount || "Total Amount"}
+          emphasis
+        >
             <p className="text-3xl font-bold text-white">{result.total_amount ?? result.total ?? "Not clearly detected"}</p>
           </BillCard>
 
           {summaryText && (
-            <BillCard icon="📄" title="{t.billSummary}">
-              <p className="leading-7 text-slate-300">{summaryText}</p>
+          <BillCard
+            icon="📄"
+            title={t.billSummary || "Bill Summary"}
+          > 
+             <p className="leading-7 text-slate-300">{summaryText}</p>
             </BillCard>
           )}
 
           {breakdownItems?.length > 0 && (
-            <BillCard icon="🧾" title="{t.chargeBreakdown}">
+            <BillCard
+              icon="🧾"
+              title={t.chargeBreakdown || "Charge Breakdown"}
+            >
               <div className="space-y-3">
                 {breakdownItems.map((item, index) => (
                   <ChargeItem key={`charge-${index}`} item={item} fallback={`Charge ${index + 1}`} />
