@@ -30,7 +30,11 @@ export default function ActionPlan({ plan, language }) {
             ? "कार्य योजना"
             : "Action Plan"}
         </h3>
-        <p className="mt-3 text-slate-300">Generate an action plan after prescription analysis.</p>
+        <p className="mt-3 text-slate-300">
+          {language === "Hindi"
+            ? "प्रिस्क्रिप्शन विश्लेषण के बाद कार्य योजना बनाएं।"
+            : "Generate an action plan after prescription analysis."}
+        </p>
       </section>
     );
   }

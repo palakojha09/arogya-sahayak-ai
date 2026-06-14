@@ -9,7 +9,7 @@ export default function CaregiverSummary({ summary, language }) {
         </span>
         <div>
           <p className="text-sm uppercase tracking-[0.22em] text-emerald-100">
-            {language === "Hindi" ? "महत्वपूर्ण" : "Important"}
+            {language === "Hindi" ? "महत्वपूर्ण" : "{language === "Hindi" ? "महत्वपूर्ण" : "Important"}"
           </p>
           <h3 className="mt-2 text-2xl font-bold text-white">
             {language === "Hindi"
