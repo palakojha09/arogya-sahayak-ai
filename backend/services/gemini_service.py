@@ -3,18 +3,28 @@ import os
 from io import BytesIO
 
 import google.generativeai as genai
+from groq import Groq
 from dotenv import load_dotenv
 from PIL import Image
 
 load_dotenv()
 
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+
+
+def get_client():
+
+    if not GROQ_API_KEY:
+        raise ValueError("GROQ_API_KEY is not set.")
+
+    return Groq(api_key=GROQ_API_KEY)
 
 
 def get_model():
 
     if not GEMINI_API_KEY:
-        raise ValueError("GEMINI_API_KEY is not set. Please add it to backend/.env")
+        raise ValueError("GEMINI_API_KEY is not set.")
 
     genai.configure(api_key=GEMINI_API_KEY)
 
@@ -22,13 +32,21 @@ def get_model():
 
 
 def text_prompt(prompt: str) -> str:
-    """Send text prompt."""
 
-    model = get_model()
+    client = get_client()
 
-    response = model.generate_content(prompt)
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ],
+        temperature=0.2,
+    )
 
-    return response.text
+    return response.choices[0].message.content
 
 
 def image_prompt(image_bytes: bytes, prompt: str) -> str:
@@ -82,8 +100,6 @@ def parse_json_response(raw_text: str):
 
 def ai_test():
 
-    model = get_model()
+    reply = text_prompt("Say hello")
 
-    response = model.generate_content("Say hello")
-
-    return {"status": "ok", "reply": response.text}
+    return {"status": "ok", "reply": reply}
