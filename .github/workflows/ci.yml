@@ -35,7 +35,7 @@ jobs:
         run: mypy backend
 
       - name: Run Tests
-        run: pytest
+        run: PYTHONPATH=backend pytest
 
       - name: Coverage
-        run: pytest --cov=backend
+        run: PYTHONPATH=backend pytest --cov=backend
