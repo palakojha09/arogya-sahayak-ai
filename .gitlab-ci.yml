@@ -1,9 +1,44 @@
 stages:
+  - lint
+  - format
+  - type_check
   - test
+  - coverage
+  - security
 
-runner-test:
+before_script:
+  - python -m pip install --upgrade pip
+  - python -m pip install -r backend/requirements.txt
+  - python -m pip install ruff mypy pytest pytest-cov pip-audit
+
+lint:
+  stage: lint
+  script:
+    - python -m ruff check .
+
+format:
+  stage: format
+  script:
+    - python -m ruff format --check .
+
+type_check:
+  stage: type_check
+  script:
+    - python -m mypy backend
+
+test:
   stage: test
   script:
-    - python --version
-    - pip --version
-    - echo "Runner works!"
+    - $env:PYTHONPATH="backend"
+    - python -m pytest
+
+coverage:
+  stage: coverage
+  script:
+    - $env:PYTHONPATH="backend"
+    - python -m pytest --cov=backend --cov-report=term
+
+dependency_audit:
+  stage: security
+  script:
+    - python -m pip_audit
