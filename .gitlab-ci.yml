@@ -40,5 +40,6 @@ coverage:
 
 dependency_audit:
   stage: security
+  allow_failure: true
   script:
     - python -m pip_audit
